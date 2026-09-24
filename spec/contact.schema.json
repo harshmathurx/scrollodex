@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://scrollodex.app/spec/scf-0/contact.schema.json",
+  "title": "Scrollodex contact record (SCF-0)",
+  "description": "contact.json: the contact a collector saves. Sealed on the CDN. Never drives rendering.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scrollodex", "handle", "name", "a11y"],
+  "properties": {
+    "scrollodex": { "const": "0" },
+    "handle": { "type": "string", "pattern": "^[a-z0-9_]{2,24}$" },
+    "name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display", "sort"],
+      "properties": {
+        "display": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 80 },
+        "sort": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 80 },
+        "given": { "$ref": "#/$defs/text", "maxLength": 60 },
+        "family": { "$ref": "#/$defs/text", "maxLength": 60 }
+      }
+    },
+    "pronouns": { "$ref": "#/$defs/text", "maxLength": 24 },
+    "title": { "$ref": "#/$defs/text", "maxLength": 80 },
+    "org": { "$ref": "#/$defs/text", "maxLength": 80 },
+    "phones": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["value"],
+        "properties": {
+          "label": { "$ref": "#/$defs/text", "maxLength": 24 },
+          "value": { "type": "string", "pattern": "^\\+[1-9][0-9]{6,14}$" }
+        }
+      }
+    },
+    "emails": {
+      "type": "array",
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["value"],
+        "properties": {
+          "label": { "$ref": "#/$defs/text", "maxLength": 24 },
+          "value": { "type": "string", "format": "email", "maxLength": 254 }
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "maxItems": 12,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "url"],
+        "properties": {
+          "label": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 40 },
+          "url": {
+            "type": "string",
+            "maxLength": 2048,
+            "anyOf": [
+              { "pattern": "^https://(?![^/]*@)(?!\\[)(?![0-9.]+(?::|/|$))[A-Za-z0-9.-]+(?::443)?(?:[/?#].*)?$" },
+              { "pattern": "^mailto:[^\\s]+$" },
+              { "pattern": "^tel:\\+[1-9][0-9]{6,14}$" }
+            ]
+          }
+        }
+      }
+    },
+    "location": { "$ref": "#/$defs/text", "maxLength": 80 },
+    "bio": { "$ref": "#/$defs/text", "maxLength": 280 },
+    "tags": {
+      "type": "array",
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9-]{1,24}$" }
+    },
+    "a11y": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 280, "description": "What the card art looks like, for screen readers and search." }
+      }
+    },
+    "remixed_from": {
+      "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^[0-9a-f]{64}$" }]
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "pattern": "^[^\\u0000-\\u001f\\u007f]*$" }
+  }
+}
