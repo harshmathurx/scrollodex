@@ -1,3 +1,5 @@
+> **Build note:** where this document disagrees with `docs/architecture/11-build-contract.md` (sealed contacts, per-digest origins, CDN worker, XChaCha, importer), the build contract is authoritative for v0.
+
 # Scrollodex Card Format, version 0 (SCF-0)
 
 > Licensed under [CC-BY-4.0](https://creativecommons.org/licenses/by/4.0/). You may implement, copy and adapt this spec with attribution. "Scrollodex" is a trademark. Implementations may say "compatible with the Scrollodex Card Format" but may not call themselves Scrollodex.
