@@ -205,17 +205,17 @@ A host MUST kill a card whose render:
 ## 5. Card document requirements for hosts
 
 A host MUST render `card.html` like this:
-1. In `<iframe sandbox="">`: the empty sandbox, with no tokens. The origin is opaque. It is served from its per-digest origin `https://<short>.cards.scrollodex.app/` (web) or a custom scheme serving verified local files (apps).
-2. With this CSP, sent as a response header:
+1. **Verify first.** Fetch `card.html` and every image, check every hash and the digest, and verify the author's seal (§7) before building anything. Never render bytes that failed.
+2. **Inline.** Replace each `images/<hash12>.webp` reference with a `data:` URI of the verified bytes, and inject the library fonts the card uses as `data:` `@font-face` rules in a host `<style>` placed right after the CSP meta.
+3. **CSP.** Place this CSP as the first child of `<head>` via `<meta http-equiv="Content-Security-Policy">` (and set the iframe `csp` attribute where supported). It is exported verbatim as `CARD_CSP` from `@scrollodex/canon`:
    ```
-   default-src 'none'; img-src 'self'; style-src 'unsafe-inline';
-   font-src https://fonts.cards.scrollodex.app; script-src 'none'; connect-src 'none';
-   frame-src 'none'; child-src 'none'; worker-src 'none'; object-src 'none';
-   media-src 'none'; manifest-src 'none'; form-action 'none'; base-uri 'none';
-   frame-ancestors https://scrollodex.app
+   default-src 'none'; img-src data:; style-src 'unsafe-inline'; font-src data:;
+   script-src 'none'; connect-src 'none'; frame-src 'none'; child-src 'none';
+   worker-src 'none'; object-src 'none'; media-src 'none'; manifest-src 'none';
+   form-action 'none'; base-uri 'none'
    ```
-3. With `Permissions-Policy` denying every feature, `X-Content-Type-Options: nosniff`, `Referrer-Policy: no-referrer`, and the content types from §1.3.
-4. With JavaScript disabled for card content wherever the platform allows it, no native bridge reachable, no network except the font library, and no persistent storage.
+4. **Empty sandbox.** Render it in `<iframe sandbox="" srcdoc="…" allow="" referrerpolicy="no-referrer">`: no sandbox tokens, an opaque origin, and no permissions.
+5. With JavaScript disabled for card content wherever the platform allows it, no native bridge reachable, no network at all, and no persistent storage.
 5. Serving the canonical bytes untouched. The only change a host makes is adding `data-face="back"` to the root element of the back rendering.
 
 ## 6. Canonicalization
