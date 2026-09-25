@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Patrick Bexley", "given": "Patrick", "family": "Bexley", "sort": "Bexley, Patrick" },
+  "title": "Vice President",
+  "org": "Pierce & Pierce",
+  "emails": [{ "label": "office", "value": "pbexley@piercepierce.example" }],
+  "phones": [{ "label": "office", "value": "+12127550101" }],
+  "location": "New York",
+  "bio": "Mergers and acquisitions, forty stories up.",
+  "tags": ["finance", "wall street", "parody"],
+  "a11y": { "summary": "A bone-white card with the name in raised serif letters that cast a faint embossed shadow, a small monogram in an oval border, and understated uppercase role text. The back lists the firm and desk in mono type over the same paper grain." }
+}

@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Wren Ashby", "given": "Wren", "family": "Ashby", "sort": "Ashby, Wren" },
+  "title": "Botanical Artist",
+  "org": "Ashby Herbarium",
+  "emails": [{ "label": "studio", "value": "wren@ashbyherbarium.example" }],
+  "links": [{ "label": "Herbarium", "url": "https://ashbyherbarium.example" }],
+  "location": "Vermont",
+  "bio": "Presses field flowers and paints botanical plates from them.",
+  "tags": ["botanical", "pressed flowers", "illustration"],
+  "a11y": { "summary": "A soft cream card with fine paper texture and a pressed botanical sprig of pink five-petal flowers, leaves and a stem in the corner. The back shows a single pressed leaf and an herbarium address." }
+}

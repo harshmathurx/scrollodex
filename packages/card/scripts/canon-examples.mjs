@@ -1,18 +1,12 @@
 // Canonicalizes every open/examples/cards/<id>/card.html in place and validates its contact.json.
 // Usage: node open/packages/card/scripts/canon-examples.mjs [--check]
-import { createRequire } from 'node:module';
-import { readdirSync, readFileSync, writeFileSync, existsSync, mkdtempSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { tmpdir } from 'node:os';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '../../../examples/cards');
-const canonDir = join(here, '../../canon');
-const { build } = createRequire(join(canonDir, 'package.json'))('esbuild');
-const out = join(mkdtempSync(join(tmpdir(), 'sx-canon-')), 'canon.mjs');
-await build({ entryPoints: [join(canonDir, 'src/index.ts')], nodePaths: [join(canonDir, 'node_modules')], bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error', mainFields: ['module', 'main'] });
-const canon = await import(pathToFileURL(out).href);
+const canon = await import(pathToFileURL(join(here, '../../../../supabase/functions/_shared/canon.js')).href);
 const check = process.argv.includes('--check');
 let bad = 0;
 for (const id of readdirSync(root).sort()) {

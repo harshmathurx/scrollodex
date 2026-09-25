@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Kaito Mori", "given": "Kaito", "family": "Mori", "sort": "Mori, Kaito" },
+  "title": "Calligrapher & Ink Maker",
+  "org": "Mori Ink Atelier",
+  "emails": [{ "label": "atelier", "value": "kaito@moriink.example" }],
+  "links": [{ "label": "Atelier", "url": "https://moriink.example" }],
+  "location": "Kyoto",
+  "bio": "Grinds sumi ink and teaches one brush stroke a day.",
+  "tags": ["calligraphy", "ink", "kyoto"],
+  "a11y": { "summary": "A warm bone-paper card with a single curving brush-ink stroke in the corner and the name written in flowing script. The back has a small red ink seal and a large handwritten quote." }
+}

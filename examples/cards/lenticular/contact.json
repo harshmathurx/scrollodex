@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Dex Ferro", "given": "Dex", "family": "Ferro", "sort": "Ferro, Dex" },
+  "title": "Lenticular Print Artist",
+  "org": "Ferro Optics Lab",
+  "emails": [{ "label": "lab", "value": "dex@ferrooptics.example" }],
+  "links": [{ "label": "Studio", "url": "https://ferrooptics.example" }],
+  "location": "Detroit",
+  "bio": "Builds lenticular prints that shift as you move past them.",
+  "tags": ["lenticular", "optics", "print"],
+  "a11y": { "summary": "A dark card ruled with diagonal striped bands that suggest depth, a layered diamond mark, and bold sans-serif name. The back repeats the stripes at a different angle to imply parallax." }
+}

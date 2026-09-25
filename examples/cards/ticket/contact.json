@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Sammy Ferris", "given": "Sammy", "family": "Ferris", "sort": "Ferris, Sammy" },
+  "title": "Carnival Barker",
+  "org": "Midway Attraction & Sideshow",
+  "emails": [{ "label": "boxoffice", "value": "sammy@midwaymail.example" }],
+  "links": [{ "label": "Show Times", "url": "https://midwaymail.example" }],
+  "location": "Coney Island",
+  "bio": "Runs the mic for the last traveling sideshow on the boardwalk.",
+  "tags": ["carnival", "vintage", "sideshow"],
+  "a11y": { "summary": "A mustard-yellow card styled as a vintage admit-one ticket, with a bold border, a perforated dashed stub on the right punched with round holes, and a rotated NO REFUNDS label. The back reads like a program note for the show." }
+}

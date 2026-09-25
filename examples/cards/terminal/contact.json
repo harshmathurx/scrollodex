@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Odessa Kade", "given": "Odessa", "family": "Kade", "sort": "Kade, Odessa" },
+  "title": "Systems Hacker",
+  "org": "Root Access Collective",
+  "emails": [{ "label": "shell", "value": "odessa@rootaccess.example" }],
+  "links": [{ "label": "Terminal", "url": "https://rootaccess.example" }],
+  "location": "Remote",
+  "bio": "Reverse engineers old protocols from a single green terminal.",
+  "tags": ["terminal", "hacking", "cli"],
+  "a11y": { "summary": "A black card lit entirely in phosphor green, with scanlines, a typing whoami command with a blinking block cursor, and a root shell prompt. The back repeats the scanline texture with a shell and practice line." }
+}

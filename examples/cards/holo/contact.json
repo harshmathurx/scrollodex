@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Iris Novak", "given": "Iris", "family": "Novak", "sort": "Novak, Iris" },
+  "title": "Holographic Print Designer",
+  "org": "Prism Foil Works",
+  "emails": [{ "label": "studio", "value": "iris@prismfoil.example" }],
+  "links": [{ "label": "Portfolio", "url": "https://prismfoil.example" }],
+  "location": "Berlin",
+  "bio": "Designs foils and films that change color as you move.",
+  "tags": ["holographic", "print", "foil"],
+  "a11y": { "summary": "An iridescent card shifting through pink, blue, green and gold like a soap bubble, with a faint diagonal film texture and a small prism mark splitting light into a rainbow. The back repeats the shimmering gradient in reverse." }
+}

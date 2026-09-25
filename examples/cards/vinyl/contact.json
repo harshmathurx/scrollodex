@@ -1,0 +1,11 @@
+{
+  "name": { "display": "Lenny Cassette", "given": "Lenny", "family": "Cassette", "sort": "Cassette, Lenny" },
+  "title": "A&R, Analog Sessions",
+  "org": "Analog Sessions",
+  "emails": [{ "label": "label", "value": "lenny@analogsessions.example" }],
+  "links": [{ "label": "Label", "url": "https://analogsessions.example" }],
+  "location": "Chicago",
+  "bio": "Scouts new tape and presses it to seven-inch vinyl.",
+  "tags": ["vinyl", "record label", "music"],
+  "a11y": { "summary": "A dark card with a large spinning vinyl record bleeding off the top left corner, its grooves and a tan paper label reading SIDE A. The name sits right-aligned beside it. The back shows the record's label centered, reading Analog Sessions." }
+}

@@ -1,0 +1,12 @@
+{
+  "name": { "display": "Priya Mehta", "given": "Priya", "family": "Mehta", "sort": "Mehta, Priya" },
+  "title": "Chef, Tasting Menus",
+  "org": "Ember & Salt",
+  "emails": [{ "label": "kitchen", "value": "priya@emberandsalt.example" }],
+  "phones": [{ "label": "reservations", "value": "+919820012345" }],
+  "links": [{ "label": "Menu", "url": "https://emberandsalt.example" }],
+  "location": "Mumbai",
+  "bio": "Runs a six-course tasting menu out of a rotating pop-up kitchen.",
+  "tags": ["chef", "tasting menu", "mumbai"],
+  "a11y": { "summary": "A cream card styled like a thermal-printed receipt, with perforated torn edges top and bottom, a dashed divider, monospace line items for role and studio, and a barcode at the bottom. The back shows a red circular PAID stamp." }
+}

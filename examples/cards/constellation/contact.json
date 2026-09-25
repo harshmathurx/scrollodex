@@ -1,0 +1,12 @@
+{
+  "name": { "display": "Nadia Starling", "given": "Nadia", "family": "Starling", "sort": "Starling, Nadia" },
+  "title": "Celestial Cartographer",
+  "org": "Cerro Lonely Observatory",
+  "emails": [{ "label": "observatory", "value": "nadia@cerrolonely.example" }],
+  "phones": [{ "label": "observatory", "value": "+56223456789" }],
+  "links": [{ "label": "Star Charts", "url": "https://cerrolonely.example" }],
+  "location": "Atacama Desert",
+  "bio": "Maps unnamed stars and gives them to people who ask nicely.",
+  "tags": ["astronomy", "cartography", "night sky"],
+  "a11y": { "summary": "A deep navy card scattered with tiny twinkling stars and a star map in the corner tracing constellation lines into the shape of an N. The name is set in tall serif letters. The back shows a circular star chart and an observatory address." }
+}

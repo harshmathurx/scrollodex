@@ -1,0 +1,12 @@
+{
+  "name": { "display": "Ruby Quarters", "given": "Ruby", "family": "Quarters", "sort": "Quarters, Ruby" },
+  "title": "Arcade Curator",
+  "org": "Quarter Room Collective",
+  "emails": [{ "label": "arcade", "value": "ruby@quarterroom.example" }],
+  "phones": [{ "label": "hotline", "value": "+14045550199" }],
+  "links": [{ "label": "Cabinets", "url": "https://quarterroom.example" }],
+  "location": "Austin",
+  "bio": "Restores and books vintage cabinets for pop-up arcades.",
+  "tags": ["arcade", "retro", "games"],
+  "a11y": { "summary": "A dark purple card glowing with pink and blue neon light, a pixel-art arcade cabinet, and a blinking yellow INSERT COIN line. The back shows a looping game of Pong on a dark court with a dotted center net." }
+}
