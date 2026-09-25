@@ -49,7 +49,9 @@ export function textViolations(html: string): string[] {
       v.push('meta ' + tag);
     }
   }
-  for (const m of lower.matchAll(/url\(\s*(['"]?)([^'")]*)\1\s*\)/g)) {
+  // url() only means anything in CSS: <style> blocks and style="" attributes.
+  const css = [...lower.matchAll(/<style>([\s\S]*?)<\/style>|\sstyle="([^"]*)"/g)].map((m) => m[1] ?? m[2] ?? '').join('\n');
+  for (const m of css.matchAll(/url\(\s*(['"]?)([^'")]*)\1\s*\)/g)) {
     const u = m[2]!;
     if (!/^images\/[0-9a-f]{12}\.(?:webp|png)$/.test(u) && !/^#[a-z][a-z0-9-]*$/.test(u)) v.push('url(' + u + ')');
   }
