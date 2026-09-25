@@ -72,7 +72,7 @@ Allowed is not the same as good. Aim for all of these:
 
 ## 4. contact.json
 
-The details people save. It's sealed at publish: nobody sees it until the person hands their card over in person. Unknown keys are rejected. `name.display` and `a11y.summary` are required.
+The details people save. It stays private: nobody sees it until the person hands their card over in person. Unknown keys are rejected. `name.display` and `a11y.summary` are required.
 
 ```json
 {
@@ -128,7 +128,7 @@ When you talk to the person, say "seal" and "sealed", never "sign", "verify", "d
 - **Walls of text:** a card isn't a CV. A name, a line, one idea. The rest goes in `contact.json` or on the back.
 - **A tiny name,** or a name below the fold where the deck strip can't show it.
 - **Relying on hover or tap:** there is no input. Anything that only happens on hover never happens.
-- **Phone numbers or emails in the art.** Card text is public to anyone with the link, while `contact.json` is sealed. Putting a number in the HTML publishes it.
+- **Phone numbers or emails in the art.** Card text is public to anyone with the link, while `contact.json` stays private. Putting a number in the HTML publishes it.
 - **Fake finishes:** painting your own glare or rainbow sheen, which fights the host's finish as the card tilts.
 - **Frantic motion:** fast loops, big bounces, many things moving at once.
 - **Web-font habits:** Georgia or Helvetica fallbacks, `@import` from Google Fonts. They're removed or won't render.

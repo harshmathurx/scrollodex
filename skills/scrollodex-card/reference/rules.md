@@ -144,7 +144,7 @@ Exactly these 18 families, spelled like this:
 
 ## Public-text warnings
 
-Text in `card.html` is public to anyone with the link. The cleaner warns (`public.phone`, `public.email`) when the card's text or title contains something shaped like a phone number or an email address. It doesn't remove them. Keep them in `contact.json`, which is sealed.
+Text in `card.html` is public to anyone with the link. The cleaner warns (`public.phone`, `public.email`) when the card's text or title contains something shaped like a phone number or an email address. It doesn't remove them. Keep them in `contact.json`, which stays private: only someone you hand your card to in person receives it.
 
 ## `contact.json` (`contact.ts`)
 
