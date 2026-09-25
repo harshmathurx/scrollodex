@@ -29,6 +29,10 @@ images/        up to 6 images, re-encoded to WebP by the publisher.
 
 The full spec is [`spec/scf-0.md`](spec/scf-0.md), and [`spec/contact.schema.json`](spec/contact.schema.json) describes `contact.json`.
 
+## Ask your agent
+
+Any coding agent (Claude Code, Codex, Cursor and the rest) can design your card. Point it at [`skills/scrollodex-card/SKILL.md`](skills/scrollodex-card/SKILL.md), or at [`llms.txt`](llms.txt), and say "make my Scrollodex card". It'll ask a few questions about you, then hand you a folder with `card.html`, `contact.json` and any images. In the app, go to **Make → Bring it from your agent** and paste or drop it in.
+
 ## Packages
 
 | Package | What it does |

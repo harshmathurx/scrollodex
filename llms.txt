@@ -1,0 +1,19 @@
+# Scrollodex
+
+> Scrollodex brings back the business card. A card is a static piece of HTML and CSS (700×400 or 400×700) plus a sealed contact record. People hand cards over with a tap, and the app tilts, flips and draws a finish (matte, gloss, foil, holo, emboss) on them. Cards run no script, hold no links and load nothing from the internet.
+
+If your user wants a Scrollodex card, follow the agent skill. It covers the interview, the hard rules, what makes a card good, and how to hand the result over.
+
+## Make a card
+
+- [Agent skill: scrollodex-card](skills/scrollodex-card/SKILL.md): design a one-of-a-kind card for your user
+- [Rules, from the code](skills/scrollodex-card/reference/rules.md): every element, attribute, CSS rule, font and limit the cleaner allows
+- [Pre-flight checklist](skills/scrollodex-card/reference/checklist.md)
+- [Starter card](skills/scrollodex-card/reference/starter/): a minimal canonical `card.html` and `contact.json`
+- [Example gallery](examples/cards/): twelve real cards
+
+## Format
+
+- [SCF-0 spec](spec/scf-0.md): the Scrollodex Card Format
+- [contact.json schema](spec/contact.schema.json)
+- [@scrollodex/canon](packages/canon/): the sanitizer; where docs and code disagree, the code wins

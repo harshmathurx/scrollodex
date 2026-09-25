@@ -1,0 +1,13 @@
+{
+  "name": { "display": "Asha Verma", "given": "Asha", "family": "Verma", "sort": "Verma, Asha" },
+  "pronouns": "she/her",
+  "title": "Type designer",
+  "org": "Studio Verma",
+  "emails": [{ "label": "studio", "value": "asha@studioverma.example" }],
+  "phones": [{ "label": "mobile", "value": "+919800000000" }],
+  "links": [{ "label": "Specimens", "url": "https://studioverma.example" }],
+  "location": "Bengaluru",
+  "bio": "Draws Devanagari and Latin display faces, mostly from shop signs.",
+  "tags": ["type design", "devanagari", "lettering"],
+  "a11y": { "summary": "A warm paper card with the name in a heavy serif at the top left, a grey role line, and a small orange sun with one planet on a thin orbit at the bottom right. The back says what she is drawing now in large italic serif." }
+}

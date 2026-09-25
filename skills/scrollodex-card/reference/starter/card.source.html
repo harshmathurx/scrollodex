@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="scrollodex:orientation" content="landscape">
+<meta name="scrollodex:finish" content="matte">
+<meta name="scrollodex:background" content="#f4efe4">
+<title>Asha Verma</title>
+<style>
+  :root {
+    --paper: #f4efe4;
+    --ink: #1b1914;
+    --muted: #5e584b;
+    --accent: #c2410c;
+    --line: rgba(27, 25, 20, .16);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #16140f;
+      --ink: #f1ebdd;
+      --muted: #b3ab99;
+      --accent: #fb923c;
+      --line: rgba(241, 235, 221, .18);
+    }
+  }
+  html, body { margin: 0; width: 700px; height: 400px; overflow: hidden; }
+  body { background: var(--paper); color: var(--ink); font-family: "Inter", system-ui, sans-serif; }
+  .face { position: absolute; inset: 0; box-sizing: border-box; padding: 40px 52px; }
+
+  .name {
+    margin: 0;
+    font-family: "Fraunces", serif;
+    font-size: 60px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -.02em;
+  }
+  .role { margin: 14px 0 0; font-size: 22px; color: var(--muted); }
+  .rule { position: absolute; left: 52px; right: 206px; bottom: 96px; height: 1px; background: var(--line); }
+  .handle {
+    position: absolute; left: 52px; bottom: 44px; margin: 0;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 20px; color: var(--muted);
+  }
+  .mark { position: absolute; right: 40px; bottom: 28px; width: 150px; height: 150px; }
+  .sun { fill: var(--accent); }
+  .orbit { transform-origin: 75px 75px; animation: orbit 48s linear infinite; }
+  @keyframes orbit { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .orbit { animation: none; } }
+
+  .back { display: none; }
+  html[data-face="back"] .front { display: none; }
+  html[data-face="back"] .back { display: block; }
+  .back .kicker {
+    margin: 0; font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 18px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+  }
+  .back .line {
+    margin: 22px 0 0; max-width: 540px;
+    font-family: "Fraunces", serif; font-size: 38px; font-style: italic; line-height: 1.15;
+  }
+  .back .place { position: absolute; left: 52px; bottom: 44px; margin: 0; font-size: 20px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <main class="face front">
+    <h1 class="name">Asha Verma</h1>
+    <p class="role">Type designer, Bengaluru</p>
+    <div class="rule"></div>
+    <p class="handle">@asha</p>
+    <svg class="mark" viewBox="0 0 150 150" role="img" aria-label="A small sun with one planet on a thin orbit">
+      <circle cx="75" cy="75" r="58" fill="none" stroke="currentColor" stroke-width="1" opacity=".35"></circle>
+      <circle class="sun" cx="75" cy="75" r="16"></circle>
+      <g class="orbit"><circle cx="133" cy="75" r="6" fill="currentColor"></circle></g>
+    </svg>
+  </main>
+  <main class="face back">
+    <p class="kicker">Now drawing</p>
+    <p class="line">A Devanagari display face that feels like hand-painted shop signs.</p>
+    <p class="place">Studio Verma · open to commissions</p>
+  </main>
+</body>
+</html>
