@@ -20,7 +20,7 @@ const IMAGE_REF = /images\/[0-9a-f]{12}\.(?:webp|png)/g;
 const DATA_URI = /^data:(?:image\/(?:webp|png|jpeg|gif|avif)|font\/woff2?);base64,[A-Za-z0-9+/]+=*$/;
 const FORBIDDEN_TAG = /<\s*\/?\s*(?:script|iframe|object|embed|frame|frameset|base|form|link|portal)\b/i;
 const FORBIDDEN_ATTR = /<[^>]*\s(?:on[a-z]+|srcdoc|formaction)\s*=/i;
-const FORBIDDEN_URL = /(?:=\s*["']?|url\(\s*["']?)\s*(?:javascript|vbscript):/i;
+const FORBIDDEN_URL = /(?:\s(?:href|src|srcset|xlink:href|action|formaction|data)\s*=\s*["']?|url\(\s*["']?)\s*(?:javascript|vbscript):/i;
 const FAMILY = /^[A-Za-z0-9 ]{1,40}$/;
 
 function pick(html: string, re: RegExp): RegExpMatchArray | null {
@@ -116,7 +116,10 @@ export function buildSrcdoc(
     (opts.still ? '<style>*,*::before,*::after{animation:none!important;transition:none!important}</style>' : '') +
     `</head><body${bodyAttrs}>${bodyInner}</body></html>`;
 
+  // Defence in depth over canon's output. Quoted attribute values are inert text, so blank them
+  // before looking for tags and handler attributes; URL schemes are checked in real URL slots only.
   const scan = doc.replace(/url\(data:[^)]*\)|data:[a-z/+-]+;base64,[A-Za-z0-9+/=]+/gi, '');
-  if (FORBIDDEN_TAG.test(scan) || FORBIDDEN_ATTR.test(scan) || FORBIDDEN_URL.test(scan)) throw new SrcdocError('srcdoc.script', 'Refusing to build a frame document containing active content.');
+  const structural = scan.replace(/="[^"]*"/g, '=""');
+  if (FORBIDDEN_TAG.test(structural) || FORBIDDEN_ATTR.test(structural) || FORBIDDEN_URL.test(scan)) throw new SrcdocError('srcdoc.script', 'Refusing to build a frame document containing active content.');
   return doc;
 }
