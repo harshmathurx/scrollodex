@@ -433,7 +433,7 @@ export class Rolodex implements Steppable {
       rot = d * AHEAD_DEG;
       op = Math.max(0, 1 + d * 0.45);
       shade = Math.min(0.5, -d * 0.2);
-      z = 1100 - Math.round(-d * 10);
+      z = 990 - Math.round(-d * 10);
     }
     const front = Math.max(0, 1 - Math.abs(d));
     const tx = this.tx * front;
