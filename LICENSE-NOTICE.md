@@ -1,4 +1,4 @@
-Everything under `open/` is published as `scrollodex-open`.
+Everything under `open/` is published as `scrollodex`.
 
 - Code (`open/packages/*`, `open/examples/*`): Apache License 2.0
 - The Scrollodex Card Format spec (`open/spec/*`): CC-BY-4.0
