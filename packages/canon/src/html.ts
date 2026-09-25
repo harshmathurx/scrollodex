@@ -293,7 +293,9 @@ function svgAttrs(ctx: Ctx, el: PElement, name: string): [string, string][] {
       v = a.value.split(/[\t\n\f\r ]+/).filter((c) => /^[A-Za-z0-9_-]{1,64}$/.test(c)).join(' ') || null;
     } else if (SVG_ATTRS.has(n)) {
       const lower = a.value.toLowerCase().replace(/[\s\u0000-\u001f]+/g, '');
-      if (lower.includes('javascript:') || lower.includes('expression(') || lower.includes('data:')) v = null;
+      // Presentation attributes are parsed as CSS, where `u\72l(` decodes to `url(`; no escapes at all.
+      if (a.value.includes('\\')) v = null;
+      else if (lower.includes('javascript:') || lower.includes('expression(') || lower.includes('data:')) v = null;
       else if (n === 'd' && a.value.length > 32768) v = null;
       else v = svgUrlRefs(a.value);
     } else {

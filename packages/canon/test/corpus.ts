@@ -229,4 +229,12 @@ export const VECTORS: string[] = [
   '<meta name="scrollodex:orientation" content="sideways">',
   '<meta name="viewport" content="width=device-width">',
   '<meta name="scrollodex:finish" content="gloss" http-equiv="refresh">',
+  // --- review 2026-09-25: URL smuggling ---
+  '<style>div{--a:"https://e.example/x.png";background-image:image-set(var(--a) 1x)}</style><div>x</div>',
+  '<div style="--a:\\"https://e.example/x.png\\";background-image:image-set(var(--a) 1x)">x</div>',
+  '<style>div{background-image:-webkit-image-set(env(x) 1x)}</style><div>x</div>',
+  '<style>div{background-image:cross-fade(var(--a), url(images/000000000000.webp) 50%)}</style><div>x</div>',
+  '<svg><rect fill="u\\72l(https://evil.example/x.svg#p)" width="10" height="10"></rect></svg>',
+  '<svg><rect filter="u\\rl(https://e.example/f.svg#f)" width="10" height="10"></rect></svg>',
+  '<svg><circle stroke="\\75 rl(https://e.example/s.svg#s)" r="4"></circle></svg>',
 ];

@@ -28,6 +28,7 @@ const DANGEROUS_TOKENS = ['expression(', 'javascript:', 'vbscript:', 'livescript
 const BANNED_FUNCTIONS = new Set(['element', '-moz-element', 'paint', 'image', 'src', 'url-prefix', 'expression', 'attr']);
 /** Functions whose string arguments are image URLs; allowed only when every one is a card image. */
 const IMAGE_FUNCTIONS = new Set(['image-set', '-webkit-image-set', 'cross-fade', '-webkit-cross-fade']);
+const IMAGE_SET_ARG_TYPES = new Set(['String', 'Url', 'Dimension', 'Number', 'Percentage', 'Operator', 'WhiteSpace']);
 const GENERIC_FAMILIES = new Set([
   'serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-serif', 'ui-sans-serif',
   'ui-monospace', 'ui-rounded', 'emoji', 'math', 'fangsong', 'inherit', 'initial', 'unset', 'revert', 'revert-layer',
@@ -209,6 +210,10 @@ function sanitizeDeclaration(decl: N, ctx: CssContext): boolean {
     ctx.reporter.removed('css.dangerous', prop);
     return false;
   }
+  if (prop.startsWith('--') && /(?:[a-z][a-z0-9+.-]*:|\/\/)/.test(sq.replace(/"[^"]*"|'[^']*'/g, (m) => m.replace(/[^a-z0-9:/+.-]/g, '')))) {
+    ctx.reporter.removed('css.url', prop);
+    return false;
+  }
   let drop: string | null = null;
   csstree.walk(value, (node: N) => {
     if (drop) return;
@@ -222,11 +227,14 @@ function sanitizeDeclaration(decl: N, ctx: CssContext): boolean {
       const fn = String(node.name).toLowerCase();
       if (BANNED_FUNCTIONS.has(fn)) drop = 'css.function';
       else if (IMAGE_FUNCTIONS.has(fn)) {
+        // Only literal images and their resolutions may appear; var(), env() or any nested function could smuggle a URL.
         node.children?.forEach((arg: N) => {
-          if (drop || arg.type !== 'String') return;
-          const v = checkImageUrl(String(arg.value), ctx, false);
-          if (v.ok) arg.value = v.ref;
-          else drop = v.code;
+          if (drop) return;
+          if (arg.type === 'String') {
+            const v = checkImageUrl(String(arg.value), ctx, false);
+            if (v.ok) arg.value = v.ref;
+            else drop = v.code;
+          } else if (!IMAGE_SET_ARG_TYPES.has(arg.type)) drop = 'css.function';
         });
       }
     } else if (node.type === 'Url') {
