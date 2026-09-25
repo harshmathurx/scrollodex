@@ -94,9 +94,9 @@ A card cannot use script, links, forms, inputs, `:hover` or `:checked` interacti
 
 ### 2.5 Font library
 
-Cards set type with the Scrollodex font library: a curated set of open-licensed families that the host serves. Authors write `font-family: "Bodoni Moda", serif`. `canon()` emits the matching `@font-face` rules pointing at `https://fonts.cards.scrollodex.app/…`, the only font source the CSP allows. Apps map that origin to font files shipped inside the app, so no font request leaves the device.
+Cards set type with the Scrollodex font library: a curated set of open-licensed families that every host ships. Authors write `font-family: "Bodoni Moda", serif`. `canon()` never emits `@font-face`; it records the library families a card uses in its metadata, and the host injects those faces as `data:` fonts in its own `<style>` right after the CSP meta, so no font request ever leaves the device.
 
-v0 families: Bodoni Moda, Cormorant Garamond, Cormorant SC, EB Garamond, Libre Caslon Text, Playfair Display, Fraunces, Instrument Serif, Hanken Grotesk, Inter, Space Grotesk, Syne, IBM Plex Mono, JetBrains Mono, VT323, Press Start 2P, Caveat, Homemade Apple.
+v0 families (normative; mirrors `FONT_LIBRARY` in `@scrollodex/canon`): Instrument Serif, Fraunces, Playfair Display, Bodoni Moda, Cormorant, EB Garamond, Libre Caslon Text, Space Grotesk, Syne, Inter, DM Sans, Archivo Black, IBM Plex Mono, JetBrains Mono, VT323, Press Start 2P, Caveat, Pinyon Script.
 
 Author font files and `@font-face` rules naming anything else are removed and reported.
 
