@@ -14,7 +14,12 @@ const FORBIDDEN_SVG = new Set(['script', 'foreignObject', 'use', 'image', 'feIma
 /** Substring checks from the build contract. Returns a list of violations (empty = inert). */
 export function textViolations(html: string): string[] {
   const v: string[] = [];
-  const lower = html.toLowerCase();
+  // Text nodes are escaped and inert; only markup and <style> contents can act.
+  const lower = html
+    .toLowerCase()
+    .split(/(<style>[\s\S]*?<\/style>)/)
+    .map((part) => (part.startsWith('<style>') ? part : part.replace(/>[^<]*</g, '><')))
+    .join('');
   const checks: [string, RegExp][] = [
     ['<script', /<script/],
     ['on*= attribute', /\son[a-z]+\s*=/],
