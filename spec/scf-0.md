@@ -205,13 +205,13 @@ Where the platform lets it measure these, a host SHOULD kill a card whose render
 - makes its render process unresponsive, or terminates it, or
 - exceeds the host's memory ceiling (SHOULD be ≥ 64 MiB).
 
-A host MUST also kill a card whose digest or handle appears on the signed blocklist (§8.6).
+A host MUST also kill a card whose digest or handle appears on the signed blocklist (§8.7).
 
 ## 5. Rendering
 
 ### 5.1 Verify, then build
 
-A host MUST verify a card (§8.6) before building anything from it, and MUST NOT render bytes that failed. Only after verification are the images turned into `data:` URIs of the verified bytes: `data:image/webp;base64,…` (or `image/png` for a `.png` path).
+A host MUST verify a card (§8.7) before building anything from it, and MUST NOT render bytes that failed. Only after verification are the images turned into `data:` URIs of the verified bytes: `data:image/webp;base64,…` (or `image/png` for a `.png` path).
 
 ### 5.2 The frame document
 
@@ -344,7 +344,7 @@ contact_commit = sha256hex(utf8("scrollodex-contact-v0\n" + salt + "\n" + jcs(va
 
 - `sha256hex` is lowercase hex of SHA-256. `b64u` is base64url without padding. The salt MUST match `^[A-Za-z0-9_-]{43}$`.
 - The client generates the salt (`randomSalt`) and sends it with the contact to `publish-prepare` over TLS. The registry stores the validated contact and the salt privately, readable only by the service role.
-- `contact_commit` is the `contact` entry of the digest's `files` (§8.2). Without the salt, the commitment reveals nothing, and a raw contact hash is never public.
+- `contact_commit` is the `contact` entry of the digest's `files` (§8.3). Without the salt, the commitment reveals nothing, and a raw contact hash is never public.
 - The registry returns the contact and salt only in a **full-scope** redeem (§9.3), as `contact_json` (the canonical contact) and `salt`. Public lookups and art-scope redeems never include them.
 - A host that receives a contact MUST check that `contact_json` is canonical (`canonContact(JSON.parse(contact_json)) === contact_json`) and that `contact_commit` recomputed from it and the salt equals `files.contact`, or reject it (`verify.contact`). It then validates the contact with `validateContact` before using it.
 
@@ -464,4 +464,39 @@ Given a card record (`handle`, `display_name`, `digest`, `files`, `meta`, `signa
 
 If any step fails, the host renders nothing from the bundle and shows only its own chrome.
 
-The registry never serves a version whose digest or handle is blocklisted, or that isn't live. It also publishes a signed blocklist at `blocklist`: `{ "issued_at", "entries": [{ "digest"? , "handle"? }], "signature" }`, where `signature` is the platform's Ed25519 signature, base64url, over `utf8(jcs({ issued_at, entries }))`. A host SHOULD sync it, verify it with the platform public key, and kill any card it lists (§4.4).
+The registry never serves a version whose digest or handle is blocklisted, or that isn't live. It also publishes a signed blocklist at `blocklist`: `{ "issued_at", "entries": [{ "digest"?, "handle"? }], "signature" }`, where `signature` is the platform's Ed25519 signature, base64url, over `utf8(jcs({ issued_at, entries }))`. A host SHOULD sync it, verify it with the platform public key, and kill any card it lists (§4.4).
+
+## 9. Handles, public cards and exchange
+
+### 9.1 Handles
+
+- A handle matches `^[a-z0-9_]{2,24}$` (`HANDLE_RE`). An account claims one with `account` `{ "action": "claim_handle", "handle", "display_name" }`; `display_name` is 1–80 characters with no control or bidi-override characters.
+- Reserved handles (platform words, roles and common brand names, `RESERVED_HANDLES`) and retired handles can't be claimed.
+- **Rename (D32).** A handle can be renamed at most once every 30 days. Renaming re-signs the current card under the new handle. The old handle is retired for good (`retired_handles`) and can never be claimed again, by anyone. `/@old` redirects to `/@new` for 90 days, then reports that the person moved on. Collected copies keep working, because a collection keys by account, not by handle, and show the new handle on their next refresh.
+- The signature binds the handle per version (§8.4), so every past version stays verifiable under the handle it was signed with.
+
+### 9.2 Public card
+
+The public card page is `{APP_ORIGIN}/@<handle>`, where `APP_ORIGIN` is the registry's configured app origin (default `https://scrollodex.app`). Its data comes from `public-card`: `GET ?handle=<handle>`, rate-limited to 60 requests a minute per IP and cacheable for 60 seconds. It returns one card record, never a list: `{ "handle", "display_name", "digest", "files", "meta", "signature", "public_key", "canon_version" }`. It never includes the contact.
+
+### 9.3 Exchange
+
+A card changes hands through a single-use **pointer**:
+
+```
+token   = b64u(16 random bytes)          22 characters, [A-Za-z0-9_-]{22}
+pointer = {APP_ORIGIN}/x/<token>
+```
+
+- **Issue** (`exchange-issue`, `POST`, 300 per hour per user). With `{ "handle" }`, any signed-in user, including an anonymous one, gets an **art-scope** token for that handle's public card. With no handle, a non-anonymous owner gets a **full-scope** token for their own current card. The response is `{ "token", "pointer", "expires_at", "scope" }`. A token lives 90 seconds; the registry stores only `sha256hex(token)`.
+- **Redeem** (`exchange-redeem`, `POST { "token" }`, 120 per hour per user). A token is single-use across people and idempotent for the same redeemer within its lifetime. The response is the card record of §9.2 plus `"scope"`, and for a full-scope token also `"contact_json"` (the canonical contact) and `"salt"` (§7). An expired token answers `token.expired`, a token someone else redeemed `token.used`, an unknown one `token.unknown`, and a blocked or non-live card `card.blocked`. Token rows are deleted shortly after expiry.
+- **Parsing.** A tap, QR code or link carries only a pointer. `parsePointer` accepts a string of at most 96 characters that matches `POINTER_RE`, `^https:\/\/scrollodex\.app\/x\/[A-Za-z0-9_-]{22}$`, and returns the token. A development origin (`http` or `https` on `localhost` or `127.0.0.1`, with an optional port) is accepted only when the caller passes it explicitly as `{ devOrigin }`. Anything else is dropped without further parsing.
+- The reference app shows a received card face-down and redeems only when the recipient taps it, so link unfurlers and in-app browsers can't burn the token. It verifies (§8.7) before rendering.
+
+## 10. Versioning
+
+- `scf` in the digest is the format **major** version. Hosts MUST refuse majors they don't know and show chrome only.
+- `CANON_VERSION` is the canonicalizer's version. Any change to canonical output bytes bumps it. Each version records the canon version it was published with, the digest binds it, and hosts re-check under it (§6.7).
+- Additive changes ship as minor revisions of this document within SCF-0. That covers new optional contact fields, new `scrollodex:*` meta names, new finishes and new font library families. Hosts MUST treat an unknown finish as `gloss` and an unknown meta name as absent.
+- A change that loosens `canon()`, the CSP or the sandbox, changes the digest, the contact commitment or the signature, or makes an optional field required is a new major.
+- A card published under SCF-0 renders the same in every SCF-0 host that shares its canon version. Allowlists only grow within a major if the conformance corpus proves the addition is safe.

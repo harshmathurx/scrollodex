@@ -2,56 +2,56 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://scrollodex.app/spec/scf-0/contact.schema.json",
   "title": "Scrollodex contact record (SCF-0)",
-  "description": "contact.json: the contact a collector saves. Sealed on the CDN. Never drives rendering.",
+  "description": "contact.json: the private contact a collector saves, released only by a full-scope redeem. Describes validateContact in @scrollodex/canon, which is normative: it also trims strings, strips spaces, dots, dashes and brackets from phone numbers before the E.164 check, counts length in code points after trimming, and drops duplicate tags.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["scrollodex", "handle", "name", "a11y"],
+  "required": ["name", "a11y"],
   "properties": {
-    "scrollodex": { "const": "0" },
-    "handle": { "type": "string", "pattern": "^[a-z0-9_]{2,24}$" },
     "name": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["display", "sort"],
+      "required": ["display"],
       "properties": {
         "display": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 80 },
-        "sort": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 80 },
-        "given": { "$ref": "#/$defs/text", "maxLength": 60 },
-        "family": { "$ref": "#/$defs/text", "maxLength": 60 }
+        "sort": { "$ref": "#/$defs/text", "maxLength": 80 },
+        "given": { "$ref": "#/$defs/text", "maxLength": 40 },
+        "family": { "$ref": "#/$defs/text", "maxLength": 40 }
       }
     },
-    "pronouns": { "$ref": "#/$defs/text", "maxLength": 24 },
+    "pronouns": { "$ref": "#/$defs/text", "maxLength": 30 },
     "title": { "$ref": "#/$defs/text", "maxLength": 80 },
     "org": { "$ref": "#/$defs/text", "maxLength": 80 },
+    "location": { "$ref": "#/$defs/text", "maxLength": 80 },
+    "bio": { "$ref": "#/$defs/bioText", "maxLength": 280 },
     "phones": {
       "type": "array",
-      "maxItems": 4,
+      "maxItems": 5,
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": ["value"],
         "properties": {
-          "label": { "$ref": "#/$defs/text", "maxLength": 24 },
-          "value": { "type": "string", "pattern": "^\\+[1-9][0-9]{6,14}$" }
+          "label": { "$ref": "#/$defs/text", "maxLength": 20 },
+          "value": { "type": "string", "maxLength": 32, "description": "E.164 (^\\+[1-9]\\d{6,14}$) after stripping spaces, ( ) . and -" }
         }
       }
     },
     "emails": {
       "type": "array",
-      "maxItems": 4,
+      "maxItems": 5,
       "items": {
         "type": "object",
         "additionalProperties": false,
         "required": ["value"],
         "properties": {
-          "label": { "$ref": "#/$defs/text", "maxLength": 24 },
-          "value": { "type": "string", "format": "email", "maxLength": 254 }
+          "label": { "$ref": "#/$defs/text", "maxLength": 20 },
+          "value": { "$ref": "#/$defs/email" }
         }
       }
     },
     "links": {
       "type": "array",
-      "maxItems": 12,
+      "maxItems": 10,
       "items": {
         "type": "object",
         "additionalProperties": false,
@@ -61,36 +61,34 @@
           "url": {
             "type": "string",
             "maxLength": 2048,
-            "anyOf": [
-              { "pattern": "^https://(?![^/]*@)(?!\\[)(?![0-9.]+(?::|/|$))[A-Za-z0-9.-]+(?::443)?(?:[/?#].*)?$" },
-              { "pattern": "^mailto:[^\\s]+$" },
-              { "pattern": "^tel:\\+[1-9][0-9]{6,14}$" }
-            ]
+            "description": "https: with a host and no username or password; mailto:<address> with no query; or tel: with an E.164 number after stripping spaces, ( ) . and -",
+            "pattern": "^(?:https://(?![^/?#]*@)[^/?#]+(?:[/?#].*)?|mailto:[^?]+|tel:.+)$"
           }
         }
       }
     },
-    "location": { "$ref": "#/$defs/text", "maxLength": 80 },
-    "bio": { "$ref": "#/$defs/text", "maxLength": 280 },
     "tags": {
       "type": "array",
       "maxItems": 12,
-      "uniqueItems": true,
-      "items": { "type": "string", "pattern": "^[a-z0-9-]{1,24}$" }
+      "items": { "type": "string", "pattern": "^[\\p{L}\\p{N}][\\p{L}\\p{N} _-]{0,23}$" }
     },
     "a11y": {
       "type": "object",
       "additionalProperties": false,
       "required": ["summary"],
       "properties": {
-        "summary": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 280, "description": "What the card art looks like, for screen readers and search." }
+        "summary": { "$ref": "#/$defs/text", "minLength": 1, "maxLength": 300, "description": "What the card art looks like, for screen readers and search." }
       }
     },
-    "remixed_from": {
-      "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^[0-9a-f]{64}$" }]
-    }
+    "remixed_from": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
   },
   "$defs": {
-    "text": { "type": "string", "pattern": "^[^\\u0000-\\u001f\\u007f]*$" }
+    "text": { "type": "string", "pattern": "^[^\\u0000-\\u001f\\u007f-\\u009f\\u202a-\\u202e\\u2066-\\u2069]*$" },
+    "bioText": { "type": "string", "pattern": "^[^\\u0000-\\u0009\\u000b-\\u001f\\u007f-\\u009f\\u202a-\\u202e\\u2066-\\u2069]*$" },
+    "email": {
+      "type": "string",
+      "maxLength": 254,
+      "pattern": "^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)+$"
+    }
   }
 }
