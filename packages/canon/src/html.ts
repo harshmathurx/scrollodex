@@ -434,6 +434,7 @@ function walk(ctx: Ctx, parent: PParent, out: ONode[], mode: Mode, parentName: s
     }
     if (HTML_KEEP.has(name)) {
       const o: OElement = { t: 'el', name, ns: 'html', attrs: htmlAttrs(ctx, el, name, parentName), children: [] };
+      if ((name === 'img' || name === 'source') && !o.attrs.some(([k]) => k === 'src' || k === 'srcset')) continue;
       if (!HTML_VOID.has(name)) walk(ctx, el, o.children, 'html', name);
       out.push(o);
       continue;
@@ -471,16 +472,19 @@ function minify(children: ONode[], preserve: boolean): ONode[] {
 
 // ---------- serialize ----------
 
+// '=', ':' and '@' are entity-encoded in text and plain attribute values, so no output ever contains
+// handler-, scheme- or at-rule-shaped substrings, even as harmless text.
+function escInert(s: string): string {
+  return s.replace(/=/g, '&#61;').replace(/:/g, '&#58;').replace(/@/g, '&#64;');
+}
 function escText(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/ /g, '&nbsp;');
+  return escInert(s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\u00a0/g, '&nbsp;'));
 }
 function escAttr(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/ /g, '&nbsp;');
+  return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\u00a0/g, '&nbsp;');
+}
+function escAttrValue(name: string, v: string): string {
+  return name === 'style' ? escAttr(v) : escInert(escAttr(v));
 }
 
 function serializeNodes(nodes: ONode[]): string {
@@ -491,7 +495,7 @@ function serializeNodes(nodes: ONode[]): string {
       continue;
     }
     s += '<' + n.name;
-    for (const [k, v] of n.attrs) s += ` ${k}="${escAttr(v)}"`;
+    for (const [k, v] of n.attrs) s += ` ${k}="${escAttrValue(k, v)}"`;
     s += '>';
     if (n.ns === 'html' && HTML_VOID.has(n.name)) continue;
     s += serializeNodes(n.children) + `</${n.name}>`;
@@ -590,7 +594,7 @@ function core(input: string, imageMap: Record<string, string>): CoreResult {
   if (dir) open += ` dir="${dir}"`;
   open += '>';
   let bodyOpen = '<body';
-  for (const [k, v] of bodyAttrs) bodyOpen += ` ${k}="${escAttr(v)}"`;
+  for (const [k, v] of bodyAttrs) bodyOpen += ` ${k}="${escAttrValue(k, v)}"`;
   bodyOpen += '>';
 
   const html = `<!doctype html>${open}<head>${head}</head>${bodyOpen}${serializeNodes(children)}</body></html>`;
