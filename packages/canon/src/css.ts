@@ -179,6 +179,10 @@ function sanitizeDeclaration(decl: N, ctx: CssContext): boolean {
     ctx.reporter.removed('css.dangerous', prop);
     return false;
   }
+  if (!prop.startsWith('--') && !(csstree.lexer as unknown as { getProperty(n: string): unknown }).getProperty(prop)) {
+    ctx.reporter.removed('css.unknown_property', prop);
+    return false;
+  }
   decl.property = prop;
   const value = decl.value;
   if (!value) return false;
