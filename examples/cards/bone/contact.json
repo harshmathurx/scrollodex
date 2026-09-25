@@ -1,0 +1,12 @@
+{
+  "name": { "display": "Theodora Vance", "given": "Theodora", "family": "Vance", "sort": "Vance, Theodora" },
+  "title": "Architect",
+  "org": "Vance & Hale",
+  "emails": [{ "label": "studio", "value": "theodora@vancehale.example" }],
+  "phones": [{ "label": "studio", "value": "+351210000101" }],
+  "links": [{ "label": "Studio", "url": "https://vancehale.example" }],
+  "location": "Lisbon",
+  "bio": "Houses, libraries and one lighthouse.",
+  "tags": ["architecture", "design", "lisbon"],
+  "a11y": { "summary": "A bone-white card with a black serif name, a small card-outline mark in the top right, and a mono handle. The back lists the studio and practice." }
+}
