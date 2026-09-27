@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { canonHtml } from '../src/index.js';
+import { canonHtml, parsePointer } from '../src/index.js';
 
 describe('smoke', () => {
   it('strips script and handlers', () => {
@@ -9,5 +9,16 @@ describe('smoke', () => {
     console.log(r.html);
     console.log(JSON.stringify(r.report, null, 1), r.externalImages);
     expect(r.html).not.toContain('script');
+  });
+});
+
+describe('parsePointer appOrigin', () => {
+  const tok = 'A'.repeat(22);
+  it('accepts the host’s own https origin only when passed', () => {
+    expect(parsePointer(`https://scrollodex-app.vercel.app/x/${tok}`)).toBeNull();
+    expect(parsePointer(`https://scrollodex-app.vercel.app/x/${tok}`, { appOrigin: 'https://scrollodex-app.vercel.app' })).toBe(tok);
+    expect(parsePointer(`https://evil.example/x/${tok}`, { appOrigin: 'https://scrollodex-app.vercel.app' })).toBeNull();
+    expect(parsePointer(`http://scrollodex-app.vercel.app/x/${tok}`, { appOrigin: 'http://scrollodex-app.vercel.app' })).toBeNull();
+    expect(parsePointer(`https://scrollodex.app/x/${tok}`, { appOrigin: 'https://scrollodex-app.vercel.app' })).toBe(tok);
   });
 });
