@@ -2,18 +2,18 @@
 
 > Scrollodex brings back the business card. A card is a static piece of HTML and CSS (700×400 or 400×700) plus a sealed contact record. People hand cards over with a tap, and the app tilts, flips and draws a finish (matte, gloss, foil, holo, emboss) on them. Cards run no script, hold no links and load nothing from the internet.
 
-If your user wants a Scrollodex card, follow the agent skill. It covers the interview, the hard rules, what makes a card good, and how to hand the result over. Everything below is also in one file: [llms-full.txt]({ORIGIN}/llms-full.txt).
+If your user wants a Scrollodex card, follow the agent skill. It covers the interview, the hard rules, what makes a card good, and how to hand the result over. Everything below is also in one file: [llms-full.txt](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/llms-full.txt).
 
 ## Make a card
 
-- [Agent skill: scrollodex-card]({ORIGIN}/skills/scrollodex-card/SKILL.md): design a one-of-a-kind card for your user
-- [Rules, from the code]({ORIGIN}/skills/scrollodex-card/reference/rules.md): every element, attribute, CSS rule, font and limit the cleaner allows
-- [Pre-flight checklist]({ORIGIN}/skills/scrollodex-card/reference/checklist.md)
-- [Starter card.html]({ORIGIN}/skills/scrollodex-card/reference/starter/card.html) and [contact.json]({ORIGIN}/skills/scrollodex-card/reference/starter/contact.json): a minimal canonical card
-- Example gallery, twelve real cards (each folder has `card.html` and `contact.json`): [ink]({ORIGIN}/examples/cards/ink/card.html), [bone]({ORIGIN}/examples/cards/bone/card.html), [holo]({ORIGIN}/examples/cards/holo/card.html), [terminal]({ORIGIN}/examples/cards/terminal/card.html), [ticket]({ORIGIN}/examples/cards/ticket/card.html), [silian-rail]({ORIGIN}/examples/cards/silian-rail/card.html), [arcade]({ORIGIN}/examples/cards/arcade/card.html), [constellation]({ORIGIN}/examples/cards/constellation/card.html), [lenticular]({ORIGIN}/examples/cards/lenticular/card.html), [receipt]({ORIGIN}/examples/cards/receipt/card.html), [pressed-flower]({ORIGIN}/examples/cards/pressed-flower/card.html), [vinyl]({ORIGIN}/examples/cards/vinyl/card.html)
+- [Agent skill: scrollodex-card](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/skills/scrollodex-card/SKILL.md): design a one-of-a-kind card for your user
+- [Rules, from the code](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/skills/scrollodex-card/reference/rules.md): every element, attribute, CSS rule, font and limit the cleaner allows
+- [Pre-flight checklist](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/skills/scrollodex-card/reference/checklist.md)
+- [Starter card.html](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/skills/scrollodex-card/reference/starter/card.html) and [contact.json](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/skills/scrollodex-card/reference/starter/contact.json): a minimal canonical card
+- Example gallery, twelve real cards (each folder has `card.html` and `contact.json`): [ink](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/ink/card.html), [bone](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/bone/card.html), [holo](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/holo/card.html), [terminal](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/terminal/card.html), [ticket](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/ticket/card.html), [silian-rail](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/silian-rail/card.html), [arcade](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/arcade/card.html), [constellation](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/constellation/card.html), [lenticular](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/lenticular/card.html), [receipt](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/receipt/card.html), [pressed-flower](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/pressed-flower/card.html), [vinyl](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/examples/cards/vinyl/card.html)
 
 ## Format
 
-- [SCF-0 spec]({ORIGIN}/spec/scf-0.md): the Scrollodex Card Format
-- [contact.json schema]({ORIGIN}/spec/contact.schema.json)
+- [SCF-0 spec](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/spec/scf-0.md): the Scrollodex Card Format
+- [contact.json schema](https://raw.githubusercontent.com/harshmathurx/scrollodex/main/spec/contact.schema.json)
 - The sanitizer is `@scrollodex/canon`; where docs and code disagree, the code wins. The rules file above restates it.
