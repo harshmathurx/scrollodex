@@ -1,15 +1,17 @@
+// The full `@scrollodex/canon` only for the re-canonicalizer (parse5 + css-tree): everything else
+// this module needs comes from the light `/core` entry, which stays free of an HTML/CSS parser.
+import { canonHtml } from '@scrollodex/canon';
 import {
   CANON_VERSION,
   b64u,
   canonContact,
-  canonHtml,
   contactCommit,
   type Contact,
   jcs,
   sha256hex,
   signingMessage,
   verifyEd25519,
-} from '@scrollodex/canon';
+} from '@scrollodex/canon/core';
 import type { VerifiedBundle } from './types';
 
 export type VerifyErrorCode =
