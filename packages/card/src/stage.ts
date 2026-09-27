@@ -241,14 +241,28 @@ export class CardStage implements Steppable {
     const m = this.o.maxTilt * amp;
     const tx = this.reduce ? -0.12 + this.tx * 0.35 : this.tx;
     const ty = this.reduce ? 0.08 + this.ty * 0.35 : this.ty;
-    const rx = (-ty * m).toFixed(2);
-    const ry = (tx * m).toFixed(2);
+    const rxN = -ty * m;
+    const ryN = tx * m;
     const deg = this.reduce ? 0 : this.a;
-    const flip = deg.toFixed(2);
-    const scale = (1 + this.lift * 0.02).toFixed(4);
-    this.body.style.transform = this.portrait
-      ? `scale(${scale}) rotateX(${rx}deg) rotateY(${ry}deg) rotateX(${flip}deg)`
-      : `scale(${scale}) rotateX(${rx}deg) rotateY(${(Number(ry) + deg).toFixed(2)}deg)`;
+    const scaleN = 1 + this.lift * 0.02;
+    const rxTotal = this.portrait ? rxN + deg : rxN;
+    const ryTotal = this.portrait ? ryN : ryN + deg;
+    // Sub-pixel/near-zero degree and scale values still put the element in a 3D compositing
+    // layer (blurred text in Chromium even at "0deg"), so a resting card gets a plain 2D
+    // transform instead of e.g. `rotateX(0.00deg)` — crisp text, same visual result.
+    const EPS_DEG = 0.03;
+    const EPS_SCALE = 0.0005;
+    const resting = Math.abs(rxTotal) < EPS_DEG && Math.abs(ryTotal) < EPS_DEG && Math.abs(scaleN - 1) < EPS_SCALE;
+    if (resting) {
+      this.body.style.transform = 'none';
+    } else {
+      const parts: string[] = [];
+      if (Math.abs(scaleN - 1) >= EPS_SCALE) parts.push(`scale(${scaleN.toFixed(4)})`);
+      if (Math.abs(rxTotal) >= EPS_DEG) parts.push(`rotateX(${rxTotal.toFixed(2)}deg)`);
+      if (Math.abs(ryTotal) >= EPS_DEG) parts.push(`rotateY(${ryTotal.toFixed(2)}deg)`);
+      this.body.style.transform = parts.join(' ') || 'none';
+    }
+    this.body.style.willChange = resting ? 'auto' : 'transform';
     const s = this.root.style;
     s.setProperty('--sx-tx', tx.toFixed(3));
     s.setProperty('--sx-ty', ty.toFixed(3));

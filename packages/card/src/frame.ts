@@ -68,9 +68,13 @@ export class CardFrame {
     this.o.onReady?.();
   };
 
-  /** Scales the fixed 700×400 (or 400×700) document to the box width. */
+  /** Scales the fixed 700×400 (or 400×700) document down to the box width. Never scales the
+   * iframe up past its authored 1:1 resolution — that's the only direction that blurs it; a box
+   * wider than the document's native size renders at native size rather than upscaling. */
   fit(boxWidth: number): void {
-    if (!this.dead) this.iframe.style.transform = `scale(${(boxWidth / this.w).toFixed(5)})`;
+    if (this.dead) return;
+    const scale = Math.min(1, boxWidth / this.w);
+    this.iframe.style.transform = `scale(${scale.toFixed(5)})`;
   }
 
   setVisible(v: boolean): void {
