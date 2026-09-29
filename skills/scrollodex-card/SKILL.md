@@ -5,9 +5,18 @@ description: Design a one-of-a-kind Scrollodex card (a static HTML/CSS business 
 
 # Scrollodex card
 
-A Scrollodex card is a 700×400 (or 400×700) piece of static HTML and CSS. The person hands it over with a tap, and it lands in someone else's deck, where it tilts, flips and catches the light. The app draws all of that motion. The card only has to be a picture of who they are.
+A Scrollodex card is a 700×400 (or 400×700) piece of static HTML and CSS — but it's alive, not a photo. The person hands it over with a tap, and it lands in someone else's deck, where the app tilts it, flips it and catches the light on it. The card can breathe on its own too: a slow shimmer across the name, a gradient that drifts, a cursor that blinks, stars that twinkle, a record that turns — plain CSS `@keyframes` and transitions, running with no script and no input. Motion is optional. It must still look finished and complete with the animation off, because decks show a still snapshot — but don't let "optional" become "skipped": raise it with the person and propose something, every time.
 
-Your job: design a card that only this person could have, then hand them a folder that the cleaner accepts without removing anything.
+Your job: design a card that only this person could have, then hand them **one folder** that the cleaner accepts without removing anything:
+
+```
+asha-verma-card/
+├── card.html      the card, front and back
+├── contact.json   their details, in the exact schema of §5
+└── images/        only if card.html uses any, referenced as images/<file>
+```
+
+The person drops that folder (or its `.zip`) on Scrollodex, which reads all three together. Everything you make goes inside it; nothing goes anywhere else.
 
 **Nobody should end up with a template card.** There is no house style and no upper bound on creativity. Receipts, star charts, pressed flowers, a vinyl record, a boarding pass, a lab notebook, a tarot card, a circuit board, a seed packet: if HTML and CSS can draw it, it can be a card. Go wild inside the guardrails below. The guardrails are about safety, not taste.
 
@@ -26,12 +35,14 @@ Before you write a line, ask briefly (one message, five or six questions, and ac
 4. **Colour.** Colours you love, colours you hate, and any brand colours.
 5. **Assets.** A logo, a signature, a photo or a texture, if they want one. Vector logos become inline SVG.
 6. **Contact.** Which phone, email and links should people save? (These go in `contact.json`, never in the art.)
+7. **Motion.** Should your card move a little? Pitch 2–3 ideas drawn from what they already told you — a chef's receipt could have a printer cursor blink, a type designer's card could shimmer across the name, a DJ's could have a record slowly turning. Give a one-line pitch, not a menu of every option in §4.
 
 Then design something that could not belong to anyone else:
 - Find the one idea. A florist's card might be a seed packet; a backend engineer's might be a man page; a chef's might be a receipt from their own kitchen. Pick the object, the material or the joke that is theirs.
 - Commit hard. One strong idea, executed with care, beats five decorations.
 - If they ask for options, offer **2–3 directions that really differ** (for example "letterpress calm", "neon arcade", "field-notebook sketch"), each in one sentence plus its type and palette. Build the one they pick.
 - Use their words. A line they said in the interview beats any tagline you could invent.
+- Unless they said no to motion, build in one or two subtle animations tied to who they are (see §4, "Make it breathe"). If they say no, drop it without a fight — the card stands fine at rest.
 
 ## 2. The hard rules
 
@@ -70,9 +81,64 @@ Allowed is not the same as good. Aim for all of these:
 - **Accessible contrast.** 4.5:1 for small text and 3:1 for large display type, in both themes. Give SVG `role="img"` and an `aria-label`, and images an `alt`.
 - **Real type.** Pair at most two or three library families. Set letter-spacing and line-height on purpose.
 
-## 4. contact.json
+## 4. Make it breathe
 
-The details people save. It stays private: nobody sees it until the person hands their card over in person. Unknown keys are rejected. `name.display` and `a11y.summary` are required.
+The app supplies tilt, flip and finish. The card supplies its own small, private motion — the thing that's true at rest and also true when it's alive. One or two of these, tied to who the person is, is plenty; a card with everything moving at once is worse than one that's still.
+
+Every pattern below is plain CSS: a `@keyframes` loop of 6 s or more, animating only `transform`, `opacity` or `background-position` (cheap, no layout thrash), with a `@media (prefers-reduced-motion: reduce)` block that turns it off. No `:hover` (cards get no input), no JS, no SMIL. Animate SVG the same way — by class, from `<style>` — never `<animate>`.
+
+**A shimmer across the name** (a slow sheen, for a type designer, a jeweller, anyone whose materials catch light):
+```css
+.name{
+  background-image:linear-gradient(100deg,var(--ink) 40%,var(--accent) 50%,var(--ink) 60%);
+  background-size:220% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;
+  animation:shimmer 8s ease-in-out infinite;
+}
+@keyframes shimmer{0%{background-position:0% 0}50%{background-position:100% 0}100%{background-position:0% 0}}
+@media (prefers-reduced-motion:reduce){.name{animation:none}}
+```
+
+**A drifting gradient** (a slow-moving glow behind the card, for anyone whose work is atmospheric or spatial):
+```css
+.glow{
+  position:absolute;inset:0;
+  background-image:radial-gradient(circle at 30% 30%,var(--accent) 0%,transparent 60%);
+  background-size:160% 160%;animation:drift 20s ease-in-out infinite;
+}
+@keyframes drift{0%{background-position:0% 0%}50%{background-position:100% 40%}100%{background-position:0% 0%}}
+@media (prefers-reduced-motion:reduce){.glow{animation:none}}
+```
+
+**A blinking cursor** (mechanical, `steps()`, for an engineer, a writer, anyone who works in a terminal):
+```css
+.cursor{display:inline-block;width:3px;height:1em;background:currentColor;animation:blink 6s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none;opacity:1}}
+```
+
+**Twinkling stars** (staggered, offbeat, for a stargazer, a night-shift worker, a dreamer):
+```css
+.star{animation:twinkle 7s ease-in-out infinite}
+.star:nth-child(2){animation-delay:1.5s}
+.star:nth-child(3){animation-delay:3.2s}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.star{animation:none;opacity:.8}}
+```
+
+**A record that turns** (linear, unhurried, for a musician, a collector, anyone whose work has a groove):
+```css
+.record{transform-origin:50% 50%;animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.record{animation:none}}
+```
+
+Each of these has been run through `canon()` (see §6.3) with an empty `removed`, `rewritten` and `warnings`, and the animation and `prefers-reduced-motion` block both present in the output. Check your own the same way before you hand a card over — a fresh idea can still trip a rule these didn't.
+
+## 5. contact.json
+
+The details people save. It stays private: nobody sees it until the person hands their card over in person. **Always write it**, even with only a name and one email: Scrollodex shows it to the person before anything else, fills Details from it, and lets them publish in one go. Without it they type everything again by hand.
+
+Use exactly these keys; unknown keys are rejected. `name.display` and `a11y.summary` are required. Every list is a list of objects, even with one entry (`"emails": [{ "value": "…" }]`, never `"email": "…"`).
 
 ```json
 {
@@ -80,9 +146,18 @@ The details people save. It stays private: nobody sees it until the person hands
   "pronouns": "she/her",
   "title": "Type designer",
   "org": "Studio Verma",
-  "phones": [{ "label": "mobile", "value": "+919800000000" }],
-  "emails": [{ "label": "studio", "value": "asha@studioverma.example" }],
-  "links": [{ "label": "Specimens", "url": "https://studioverma.example" }],
+  "phones": [
+    { "label": "mobile", "value": "+919800000000" },
+    { "label": "studio", "value": "+918041234567" }
+  ],
+  "emails": [
+    { "label": "studio", "value": "asha@studioverma.example" },
+    { "label": "personal", "value": "asha.verma@example.com" }
+  ],
+  "links": [
+    { "label": "Specimens", "url": "https://studioverma.example" },
+    { "label": "Instagram", "url": "https://instagram.com/studioverma" }
+  ],
   "location": "Bengaluru",
   "bio": "Draws Devanagari and Latin display faces, mostly from shop signs.",
   "tags": ["type design", "devanagari", "lettering"],
@@ -96,9 +171,9 @@ The details people save. It stays private: nobody sees it until the person hands
 - Don't add `handle`, `scrollodex` or `remixed_from: null`; they're rejected. The app adds the handle.
 - Use only details the person gave you. Never invent a phone number or email.
 
-## 5. Workflow
+## 6. Workflow
 
-1. **Write the files.** A folder named for the person, containing `card.html`, `contact.json` and, if needed, `images/`. Write readable HTML; the app minifies it. Start from `reference/starter/card.source.html` if it helps with structure.
+1. **Make the folder.** One folder named for the person, lowercase with hyphens: `<handle-or-name>-card/` (`asha-verma-card/`). Inside it, and nowhere else: `card.html`, `contact.json` and, only if the card uses any, `images/` (flat, no subfolders). Write readable HTML; the app minifies it. Start from `reference/starter/` if it helps with structure.
 2. **Self-check against the rules.** Walk `reference/checklist.md`. Grep your own output for `<script`, ` on`, `<a `, `http`, `@import`, `@font-face`, `:hover`, `position: fixed`, `data:` and any font name not in the library.
 3. **Run the canonical check, if you can.** In a checkout of the `scrollodex` repo (paths below are from its root):
    ```sh
@@ -114,13 +189,13 @@ The details people save. It stays private: nobody sees it until the person hands
    ```
    Aim for empty `removed` and `rewritten` (except `image.missing` for `images/<file>` refs, which the app maps when you drop the whole folder), no warnings, and `ok: true`. Without the repo, check by hand against `reference/rules.md`.
 4. **Look at it.** Open `card.html` in a browser at 700×400. For the back, copy it and add `data-face="back"` to `<html>`. Check it in dark mode too.
-5. **Hand the folder over** (`card.html`, `contact.json`, `images/`), with a line on the idea behind it and the finish you chose.
-6. **They bring it in.** In Scrollodex: **Make → Bring it from your agent**, then paste the HTML or drop the folder.
-7. **They publish.** The app shows what it cleaned, if anything. They preview, then **hold to seal**. Later edits publish with a tap.
+5. **Hand the folder over**, with a line on the idea behind it and the finish you chose. If you can write files, give them the folder itself. If the chat can only attach one file, zip the folder (`zip -r asha-verma-card.zip asha-verma-card`) and hand over the `.zip`. Don't hand over `card.html` alone, or paste it into the chat as the only result: that loses `contact.json` and `images/`, and the person retypes their details.
+6. **Tell them how to bring it in**, in one line: *In Scrollodex, open Make → Ask your agent → Bring back the folder, and drop this folder (or the .zip) on the screen.* The app lists what it found, shows `contact.json` so they can check their details, previews the card front and back, and fills Details from the file.
+7. **They publish.** From the preview, **Looks right** opens Details already filled; **Publish** asks them to **hold to seal**. Later edits publish with a tap.
 
 When you talk to the person, say "seal" and "sealed", never "sign", "verify", "digest" or "canonical".
 
-## 6. Anti-patterns
+## 7. Anti-patterns
 
 - **The Canva-template look:** name centered, title below, logo top-left, thin border. If it could be anyone's card, start over.
 - **Generic gradients:** purple-to-blue meshes, glassmorphism blobs, "aurora" backgrounds with no reason to be there.
@@ -133,7 +208,7 @@ When you talk to the person, say "seal" and "sealed", never "sign", "verify", "d
 - **Frantic motion:** fast loops, big bounces, many things moving at once.
 - **Web-font habits:** Georgia or Helvetica fallbacks, `@import` from Google Fonts. They're removed or won't render.
 
-## 7. Prompt bank
+## 8. Prompt bank
 
 Seeds to start from. Twist each one until it's theirs.
 1. A seed packet: botanical illustration on the front, "sowing instructions" for working with them on the back.

@@ -4,7 +4,8 @@ Run through this before you hand the folder over. Every "must" is enforced by th
 
 ## The folder
 
-- [ ] Exactly `card.html`, `contact.json` and, if needed, `images/`. No subfolders inside `images/`, nothing else at the top.
+- [ ] One folder named for the person (`asha-verma-card/`), holding exactly `card.html`, `contact.json` and, if needed, `images/`. No subfolders inside `images/`, nothing else at the top.
+- [ ] `contact.json` is there, even if it only has a name, one way to reach them and `a11y.summary`.
 - [ ] `card.html` is under 51,200 bytes (`wc -c card.html`).
 - [ ] At most 6 images, each PNG, JPEG or WebP, 1600 px or less on the long side, about 300 KB total. The finish mask counts as one.
 - [ ] Every `images/…` reference in the HTML names a file that's actually in `images/`.
@@ -33,6 +34,7 @@ Run through this before you hand the folder over. Every "must" is enforced by th
 - [ ] Read at 358 px wide, about half size: nothing important smaller than 20 px on the 700 px canvas, the name 44 px or larger.
 - [ ] Have a back (`html[data-face="back"] …`) that adds something the front doesn't say. No back rules means the host draws its own contact back, which is fine, but on purpose.
 - [ ] Use one finish, chosen because of the design. For spot foil, holo lettering or raised emboss, pair it with a `scrollodex:finish-mask` image.
+- [ ] Asked about motion; the card moves (subtly) unless they said no.
 - [ ] Look finished when still. Decks show a snapshot with animation off, so the un-animated state is the design.
 - [ ] Move slowly if it moves (loops of 6 s or more, small amplitude), with a `prefers-reduced-motion: reduce` block that stops it.
 - [ ] Work in both schemes via `@media (prefers-color-scheme: dark)`, or look deliberately the same in both.
@@ -52,3 +54,4 @@ Run through this before you hand the folder over. Every "must" is enforced by th
 - [ ] Run the canonical check (see SKILL.md) or walk this list by hand.
 - [ ] Look at it: open `card.html` in a browser at 700×400, then add `data-face="back"` to `<html>` in a scratch copy to see the back.
 - [ ] Ask yourself: could this card belong to anyone else? If yes, it isn't done.
+- [ ] Hand over the folder, or its `.zip` if the chat takes one file. Never `card.html` alone.

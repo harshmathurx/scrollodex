@@ -17,6 +17,7 @@ export {
   digestFromHashes,
   signingMessage,
   keyProofMessage,
+  approveMessage,
   isValidPublicKey,
   verifyEd25519,
   ed25519,

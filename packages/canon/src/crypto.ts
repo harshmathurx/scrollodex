@@ -89,6 +89,13 @@ export function keyProofMessage(userId: string, publicKeyB64u: string): string {
   return `scrollodex-key-v0\n${userId}\n${publicKeyB64u}`;
 }
 
+/** Signed by an already-active key to approve a pending one (trust layer v1, D-next). Binds the
+ * user and the exact pending public key, so a replayed signature can only ever approve that one
+ * key, for that one account. */
+export function approveMessage(userId: string, pendingPublicKeyB64u: string): string {
+  return `scrollodex-approve-v0\n${userId}\n${pendingPublicKeyB64u}`;
+}
+
 /** 32 bytes, a valid curve point, and not of small order. */
 export function isValidPublicKey(publicKeyRaw: Uint8Array): boolean {
   if (!(publicKeyRaw instanceof Uint8Array) || publicKeyRaw.length !== 32) return false;
